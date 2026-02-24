@@ -1,0 +1,386 @@
+<!--
+PLAN SUMMARY:
+1. Narrative: The infographic flows from "Philosophy" to "Weekly Analysis", "Expanded Superfoods", "Daily Routine", and finally "Coach's Tips & Contact".
+2. Visual Choices:
+   - 1/2 Plate Rule -> Donut Chart -> Proportional breakdown.
+   - Expanded Nutrient Analysis -> Bar Chart -> Compare frequency of more meal types (added Legumes/Lentils).
+   - Daily Routine -> Vertical Timeline -> Process flow.
+   - Pro-Tips -> Icon Grid -> Informative.
+3. Technical Confirmation: 
+   - No SVG used. (Icons are Unicode/Emoji).
+   - No Mermaid JS used. 
+   - Label wrapping logic (16 chars) implemented.
+   - Tooltip callback configuration implemented.
+   - WhatsApp integration added via standard <a> link.
+-->
+
+<!--
+PALETTE SELECTION: "Energetic & Playful" (Vibrant Palette)
+- Primary Green: #2E7D32
+- Energetic Orange: #FF6D00
+- Deep Blue: #1565C0
+- Accent Yellow: #FFD600
+- Background: #F1F8E9
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coach Ndiema - Health & Vitality Infographic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F1F8E9;
+            color: #1A202C;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+
+        .custom-shadow {
+            box-shadow: 0 4px 20px -2px rgba(46, 125, 50, 0.1);
+        }
+
+        .timeline-container {
+            position: relative;
+        }
+        .timeline-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 24px;
+            width: 4px;
+            background-color: #FF6D00;
+        }
+        @media (min-width: 768px) {
+            .timeline-line {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        .whatsapp-btn {
+            background-color: #25D366;
+            transition: all 0.3s ease;
+        }
+        .whatsapp-btn:hover {
+            background-color: #128C7E;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="p-0 m-0">
+
+    <!-- HERO SECTION -->
+    <section class="bg-[#2E7D32] text-white py-16 px-6 text-center shadow-xl">
+        <div class="max-w-5xl mx-auto">
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tighter mb-4">COACH NDIEMA FITNESS</h1>
+            <p class="text-[#FFD600] text-xl md:text-2xl font-bold uppercase tracking-widest mb-8">NDIEMA HYBRID COACHING</p>
+            <div class="h-1 w-24 bg-[#FF6D00] mx-auto mb-8"></div>
+            <p class="text-lg md:text-xl max-w-3xl mx-auto leading-relaxed opacity-90 mb-8">
+                Transforming lives through a science-backed, Kenyan-rooted nutritional approach. 
+                Focusing on **Weight Loss**, **Memory Recovery**, and **Sustainable Vitality**.
+            </p>
+            <!-- WhatsApp Contact -->
+            <a href="https://wa.me/254759500240" target="_blank" class="whatsapp-btn inline-flex items-center px-8 py-4 rounded-full text-white font-bold text-lg shadow-2xl">
+                <span class="mr-3">💬</span> Chat on WhatsApp: 0759500240
+            </a>
+        </div>
+    </section>
+
+    <main class="max-w-6xl mx-auto px-4 py-12 space-y-16">
+
+        <!-- CORE PHILOSOPHY -->
+        <section>
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-extrabold text-[#2E7D32]">01. The Core Philosophy</h2>
+                <p class="text-gray-600 mt-2 italic">Nutrient Density over Caloric Deprivation</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-white p-8 rounded-3xl custom-shadow border border-green-100">
+                <div>
+                    <p class="text-gray-700 leading-relaxed mb-6">
+                        The foundation of this plan rests on the **1/2 Plate Rule**. By prioritizing traditional vegetables and fiber, we naturally reduce calorie intake while flooding the body with neuro-protective vitamins.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-4 p-3 bg-green-50 rounded-xl">
+                            <div class="bg-[#2E7D32] text-white w-10 h-10 rounded-full flex items-center justify-center font-bold">1</div>
+                            <span class="font-semibold text-gray-800">Stabilize Blood Sugar</span>
+                        </div>
+                        <div class="flex items-center space-x-4 p-3 bg-blue-50 rounded-xl">
+                            <div class="bg-[#1565C0] text-white w-10 h-10 rounded-full flex items-center justify-center font-bold">2</div>
+                            <span class="font-semibold text-gray-800">Fuel Brain Neurons</span>
+                        </div>
+                        <div class="flex items-center space-x-4 p-3 bg-orange-50 rounded-xl">
+                            <div class="bg-[#FF6D00] text-white w-10 h-10 rounded-full flex items-center justify-center font-bold">3</div>
+                            <span class="font-semibold text-gray-800">Preserve Lean Muscle</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="plateChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXPANDED WEEKLY COMPOSITION -->
+        <section>
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-extrabold text-[#2E7D32]">02. Expanded Nutrient Focus</h2>
+                <p class="text-gray-600 mt-2">Quantitative analysis including expanded meal options.</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-3xl custom-shadow border border-blue-100">
+                <p class="text-gray-700 mb-8 max-w-3xl mx-auto text-center">
+                    This visualization displays the frequency of specific groups across your 7-day meal schedule, now including **Legumes (Ndengu/Kamande)** and **Githeri** for balanced fiber and protein.
+                </p>
+                <div class="chart-container" style="max-height: 500px; height: 400px;">
+                    <canvas id="weeklyFrequencyChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- COACH'S PRO-TIPS -->
+        <section class="bg-[#2E7D32] text-white p-8 md:p-12 rounded-3xl shadow-xl">
+            <h3 class="text-3xl font-bold mb-8 text-center">Coach Ndiema's Pro-Tips</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="flex items-start space-x-4">
+                    <span class="text-3xl bg-[#FFD600] rounded-lg p-2">🧊</span>
+                    <div>
+                        <h4 class="font-bold text-xl">Cold Water Therapy</h4>
+                        <p class="text-sm opacity-90">End your shower with 30 seconds of cold water to boost metabolic rate and dopamine for memory.</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <span class="text-3xl bg-[#FFD600] rounded-lg p-2">☕</span>
+                    <div>
+                        <h4 class="font-bold text-xl">Sugar-Free Habits</h4>
+                        <p class="text-sm opacity-90">Avoid sugar in tea/coffee. Use cinnamon for natural sweetness to prevent insulin spikes.</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <span class="text-3xl bg-[#FFD600] rounded-lg p-2">🚶</span>
+                    <div>
+                        <h4 class="font-bold text-xl">Post-Meal Walks</h4>
+                        <p class="text-sm opacity-90">A 10-minute walk after lunch or dinner reduces the glucose response of the meal.</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <span class="text-3xl bg-[#FFD600] rounded-lg p-2">🥣</span>
+                    <div>
+                        <h4 class="font-bold text-xl">Wimbi Advantage</h4>
+                        <p class="text-sm opacity-90">Finger millet (Wimbi) is superior for memory due to its high calcium and amino acid content.</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <span class="text-3xl bg-[#FFD600] rounded-lg p-2">🍳</span>
+                    <div>
+                        <h4 class="font-bold text-xl">The Egg Secret</h4>
+                        <p class="text-sm opacity-90">Egg yolks contain Choline, a building block for the neurotransmitter involved in memory.</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <span class="text-3xl bg-[#FFD600] rounded-lg p-2">📱</span>
+                    <div>
+                        <h4 class="font-bold text-xl">Digital Detox</h4>
+                        <p class="text-sm opacity-90">No screens 1 hour before bed to improve sleep quality for brain recovery.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BRAIN SUPERFOODS -->
+        <section>
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-extrabold text-[#2E7D32]">03. Kenyan Superfoods Spotlight</h2>
+                <p class="text-gray-600 mt-2">Denser nutrients for memory and metabolism.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border-t-4 border-[#1565C0] hover:scale-105 transition-transform">
+                    <div class="text-4xl mb-4">🐟</div>
+                    <h4 class="font-extrabold text-xl mb-2 text-[#1565C0]">Omena</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">High in DHA Omega-3s. Critical for rebuilding brain cell membranes and enhancing recall.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border-t-4 border-[#FF6D00] hover:scale-105 transition-transform">
+                    <div class="text-4xl mb-4">🍠</div>
+                    <h4 class="font-extrabold text-xl mb-2 text-[#FF6D00]">Nduma</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">Arrowroots provide slow-release complex carbs, preventing brain fog.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border-t-4 border-[#2E7D32] hover:scale-105 transition-transform">
+                    <div class="text-4xl mb-4">🌿</div>
+                    <h4 class="font-extrabold text-xl mb-2 text-[#2E7D32]">Managu</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">Traditional greens rich in Iron and Magnesium for oxygen flow to the brain.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border-t-4 border-[#FFD600] hover:scale-105 transition-transform">
+                    <div class="text-4xl mb-4">🌰</div>
+                    <h4 class="font-extrabold text-xl mb-2 text-[#37474F]">Pumpkin Seeds</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">Packed with Zinc. Vital for thinking skills and metabolic rate.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- DAILY EXECUTION TIMELINE -->
+        <section>
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-extrabold text-[#2E7D32]">04. The 24-Hour Cycle</h2>
+                <p class="text-gray-600 mt-2">Routine creates the result.</p>
+            </div>
+
+            <div class="timeline-container max-w-4xl mx-auto py-10 px-4">
+                <div class="timeline-line"></div>
+                <div class="space-y-12">
+                    <div class="relative flex flex-col md:flex-row items-center">
+                        <div class="flex-1 md:text-right md:pr-12 mb-4 md:mb-0">
+                            <h5 class="text-xl font-bold text-[#2E7D32]">06:00 AM</h5>
+                            <p class="text-gray-700">500ml Water + Movement session.</p>
+                        </div>
+                        <div class="z-10 w-12 h-12 rounded-full bg-[#1565C0] border-4 border-white shadow flex items-center justify-center font-bold text-white">1</div>
+                        <div class="flex-1 md:pl-12">
+                            <span class="text-sm font-bold text-[#1565C0] uppercase tracking-widest">Metabolic Ignition</span>
+                        </div>
+                    </div>
+                    <div class="relative flex flex-col md:flex-row items-center">
+                        <div class="flex-1 md:text-right md:pr-12 mb-4 md:mb-0 order-2 md:order-1">
+                            <span class="text-sm font-bold text-[#FF6D00] uppercase tracking-widest">Cognitive Fuel</span>
+                        </div>
+                        <div class="z-10 w-12 h-12 rounded-full bg-[#FF6D00] border-4 border-white shadow flex items-center justify-center font-bold text-white order-1 md:order-2">2</div>
+                        <div class="flex-1 md:pl-12 order-3 md:order-3">
+                            <h5 class="text-xl font-bold text-[#FF6D00]">12:30 PM</h5>
+                            <p class="text-gray-700">Lunch featuring Omena/Fish and Greens.</p>
+                        </div>
+                    </div>
+                    <div class="relative flex flex-col md:flex-row items-center">
+                        <div class="flex-1 md:text-right md:pr-12 mb-4 md:mb-0">
+                            <h5 class="text-xl font-bold text-[#37474F]">07:00 PM</h5>
+                            <p class="text-gray-700">Light protein supper. No eating after 8 PM.</p>
+                        </div>
+                        <div class="z-10 w-12 h-12 rounded-full bg-[#37474F] border-4 border-white shadow flex items-center justify-center font-bold text-white">3</div>
+                        <div class="flex-1 md:pl-12">
+                            <span class="text-sm font-bold text-gray-500 uppercase tracking-widest">Repair Window</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-[#1A202C] text-white py-12 px-6 text-center mt-12">
+        <p class="text-2xl font-black mb-2 uppercase tracking-tighter">HYBRID FITNESS COACHING</p>
+        <p class="text-[#FFD600] font-bold mb-6">COACH NDIEMA</p>
+        
+        <div class="mb-8">
+            <a href="https://wa.me/254759500240" target="_blank" class="whatsapp-btn inline-flex items-center px-6 py-3 rounded-xl text-white font-bold text-md shadow-lg">
+                <span class="mr-2">📲</span> WhatsApp: 0759500240
+            </a>
+        </div>
+
+        <p class="text-sm text-gray-400 max-w-2xl mx-auto italic">
+            "Fitness at your doorstep, health in your hands."
+        </p>
+        <p class="text-xs text-gray-600 mt-8 border-t border-gray-800 pt-6">
+            Disclaimer: This infographic is for visual educational purposes. Consult Coach Ndiema for personalized adjustments.
+        </p>
+    </footer>
+
+    <script>
+        function wrapLabel(label) {
+            if (typeof label !== 'string' || label.length <= 16) return label;
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+            for (let i = 1; i < words.length; i++) {
+                if ((currentLine + " " + words[i]).length <= 16) {
+                    currentLine += " " + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        const tooltipConfig = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    return Array.isArray(label) ? label.join(' ') : label;
+                }
+            }
+        };
+
+        const plateCtx = document.getElementById('plateChart').getContext('2d');
+        new Chart(plateCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Vegetables (50%)', 'Lean Protein (25%)', 'Complex Carbs (25%)'].map(wrapLabel),
+                datasets: [{
+                    data: [50, 25, 25],
+                    backgroundColor: ['#2E7D32', '#1565C0', '#FF6D00'],
+                    hoverOffset: 15,
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { font: { weight: 'bold' } } },
+                    tooltip: tooltipConfig
+                }
+            }
+        });
+
+        const weeklyCtx = document.getElementById('weeklyFrequencyChart').getContext('2d');
+        const weeklyLabels = [
+            'Traditional Greens (Managu/Terere)',
+            'Neuro Proteins (Omena/Fish/Liver)',
+            'Low-GI Roots (Nduma/Sweet Potato)',
+            'Legumes (Ndengu/Kamande/Githeri)',
+            'Healthy Fats (Avocado/Nuts)',
+            'Wimbi/Oat Porridge'
+        ];
+
+        new Chart(weeklyCtx, {
+            type: 'bar',
+            data: {
+                labels: weeklyLabels.map(wrapLabel),
+                datasets: [{
+                    label: 'Weekly Servings',
+                    data: [14, 11, 10, 8, 7, 6],
+                    backgroundColor: ['#2E7D32', '#1565C0', '#FF6D00', '#6A1B9A', '#FFD600', '#795548'],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
+                    x: { grid: { display: false } }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: tooltipConfig
+                }
+            }
+        });
+    </script>
+</body>
+</html>
